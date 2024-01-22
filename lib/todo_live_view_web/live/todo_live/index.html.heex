@@ -1,0 +1,54 @@
+<.header>
+  Listing Todos
+</.header>
+
+<.live_component
+  module={TodoLiveViewWeb.TodoLive.FormComponent}
+  id={@todo.id || :index}
+  title={@page_title}
+  action={@live_action}
+  todo={@todo}
+  patch={~p"/todos"}
+/>
+
+<.table id="todos" rows={@streams.todos}>
+  <:col :let={{_id, todo}}>
+    <.input
+      field={todo.completed}
+      type="checkbox"
+      name="completed"
+      value={todo.completed}
+      phx-click={JS.push("toggle_todo", value: %{id: todo.id})}
+      phx-value-id={todo.id}
+    />
+  </:col>
+  <:col :let={{_id, todo}}><%= todo.text %></:col>
+  <:action :let={{_id, todo}}>
+    <.link patch={~p"/todos/#{todo}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, todo}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: todo.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<div>
+  Show:
+  <ul class="flex gap-4">
+    <li>
+      <.link patch={~p"/todos?filter_by=all"} class="text-blue-600 underline">All</.link>
+    </li>
+    <li>
+      <.link patch={~p"/todos?filter_by=active"} class="text-blue-600 underline">Active</.link>
+    </li>
+    <li>
+      <.link patch={~p"/todos?filter_by=completed"} class="text-blue-600 underline">
+        Completed
+      </.link>
+    </li>
+  </ul>
+</div>
