@@ -18,7 +18,7 @@ defmodule TodoLiveViewWeb.TodoLive.Index do
 
   defp apply_filter(socket, params) do
     list_todos = Todos.list_todos()
-    IO.inspect(socket.assigns)
+    IO.inspect(params)
 
     case params["filter_by"] do
       "completed" ->
@@ -80,5 +80,19 @@ defmodule TodoLiveViewWeb.TodoLive.Index do
      socket
      |> put_flash(:info, "Todo has been completed")
      |> push_patch(to: ~p"/todos")}
+  end
+
+  def handle_event("todo_attempt_complete", %{"id" => id}, socket) do
+    todo = Todos.get_todo!(id)
+    {:ok, updated_todo} = Todos.update_todo(todo, %{completed: !todo.completed})
+
+    socket =
+      socket
+      |> push_event("todo_is_complete", %{
+        id: updated_todo.id,
+        completed: updated_todo.completed
+      })
+
+    {:noreply, socket}
   end
 end

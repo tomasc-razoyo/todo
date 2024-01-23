@@ -18,8 +18,9 @@
       type="checkbox"
       name="completed"
       value={todo.completed}
-      phx-click={JS.push("toggle_todo", value: %{id: todo.id})}
-      phx-value-id={todo.id}
+      id={"checkbox-todo-#{todo.id}"}
+      data-id={todo.id}
+      phx-hook="PartyConfetti"
     />
   </:col>
   <:col :let={{_id, todo}}><%= todo.text %></:col>
