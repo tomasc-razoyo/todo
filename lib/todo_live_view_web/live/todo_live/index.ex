@@ -6,14 +6,14 @@ defmodule TodoLiveViewWeb.TodoLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    # {:ok, stream(socket, :todos, Todos.list_todos())}
-    {:ok, socket}
+    {:ok, stream(socket, :todos, Todos.list_todos())}
+    # {:ok, socket}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
-    # {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-    apply_filter(socket, params)
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    # apply_filter(socket, params)
   end
 
   defp apply_filter(socket, params) do
