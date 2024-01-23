@@ -87,6 +87,13 @@ defmodule TodoLiveViewWeb.TodoLive.Index do
     {:ok, updated_todo} = Todos.update_todo(todo, %{completed: !todo.completed})
 
     socket =
+      if updated_todo.completed == true do
+        socket |> put_flash(:info, "Todo has been completed")
+      else
+        socket |> put_flash(:error, "Todo has been set to active")
+      end
+
+    socket =
       socket
       |> push_event("todo_is_complete", %{
         id: updated_todo.id,
